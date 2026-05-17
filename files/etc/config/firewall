@@ -3,9 +3,6 @@ config defaults
 	option input 'REJECT'
 	option output 'ACCEPT'
 	option forward 'REJECT'
-	option flow_offloading '1'
-	option flow_offloading_hw '1'
-	option fullcone '1'
 	option synflood_protect '1'
 
 config zone
@@ -14,18 +11,6 @@ config zone
 	option output 'ACCEPT'
 	option forward 'ACCEPT'
 	list network 'lan'
-
-config forwarding
-	option src 'lan'
-	option dest 'wan_zone'
-
-config forwarding
-	option src 'lan'
-	option dest 'usb_zone'
-
-config forwarding
-	option src 'lan'
-	option dest 'wifi_zone'
 
 config zone 'wan_zone'
 	option name 'wan_zone'
@@ -67,43 +52,3 @@ config forwarding
 config forwarding
 	option src 'lan'
 	option dest 'wifi_zone'
-
-config zone 'zone_voucher'
-	option name 'zone_voucher'
-	option network 'WAN_TO_LAN'
-	option input 'ACCEPT'
-	option output 'ACCEPT'
-	option forward 'REJECT'
-	option masq '1'
-	option mtu_fix '1'
-
-config forwarding
-	option src 'zone_voucher'
-	option dest 'wan_zone'
-
-config rule
-	option name 'Allow-DNS-DHCP-Voucher'
-	option src 'zone_voucher'
-	option proto 'udp tcp'
-	option dest_port '53 67 68'
-	option target 'ACCEPT'
-
-config include 'nodogsplash'
-	option type 'script'
-	option path '/usr/lib/nodogsplash/restart.sh'
-
-config rule
-	option src 'zone_voucher'
-	option name 'Blokir_LuCI_Voucher'
-	list proto 'tcp'
-	option dest_port '80 443'
-	option target 'REJECT'
-
-config rule
-	option src 'zone_voucher'
-	option dest 'wan_zone'
-	option name 'Blokir_Akses_Jaringan_Utama'
-	list proto 'all'
-	list dest_ip '192.168.1.1'
-	list dest_ip '192.168.0.1'
-	option target 'REJECT'
